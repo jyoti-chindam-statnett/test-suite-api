@@ -5,7 +5,27 @@ meta {
 }
 
 get {
-  url: http://elhservices1-test9.elhub.cloud:8088/metering-values/v1/metering-points/
-  body: none
-  auth: none
+  url: http://elhservices1-test9.elhub.cloud:8088/metering-values/v1/metering-points/902266200000000074/estimated-annual-volumes/current?direction=OUT
+  body: json
+  auth: basic
+}
+
+params:query {
+  direction: OUT
+}
+
+headers {
+  Elhub-OrganizationNo: 915925529
+  Elhub-PartyId: 7080003824349
+  Elhub-PartyTypeCode: DomainOwner
+  Elhub-InternalId: f5afed6a-79c6-961a-e053-04058d0a22f9
+  Content-Type: application/json
+  Elhub-RoleType: ElhubOperatorUserRole
+  Elhub-RoleCodeList: DO_001_NO
+  Elhub-AuthorizationType: ElhubUserRole
+}
+
+auth:basic {
+  username: estimated-annual-volume-api-user
+  password: cgNrJZ!Ba4l1Er
 }
