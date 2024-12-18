@@ -1,0 +1,17 @@
+meta {
+  name: History EAV
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://elhservices1-test9.elhub.cloud:8088/metering-values/v1/metering-points/902266200000000074/estimated-annual-volumes/history?direction=OUT&fromDate=2023-01-01&toDate=2024-12-31
+  body: none
+  auth: none
+}
+
+params:query {
+  direction: OUT
+  fromDate: 2023-01-01
+  toDate: 2024-12-31
+}
