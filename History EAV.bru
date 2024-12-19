@@ -31,3 +31,70 @@ auth:basic {
   username: {{API_USERNAME}}
   password: {{API_PASSWORD}}
 }
+
+tests {
+  test("should return a status of 200", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("should return data with the correct type", function() {
+    const data = res.getBody();
+    expect(data).to.have.property('data').that.is.an('array');
+    expect(data.data[0]).to.have.property('type', 'estimated-annual-volumes');
+  });
+  
+  test("should have valid attributes in the first data item", function() {
+    const attributes = res.getBody().data[0].attributes;
+    expect(attributes).to.have.property('id').that.is.a('string');
+    expect(attributes).to.have.property('direction', 'OUT');
+    expect(attributes).to.have.property('volume').that.is.a('number');
+    expect(attributes.volume).to.be.above(0);
+    expect(attributes).to.have.property('calculationMethod', 'MANUAL');
+    expect(attributes).to.have.property('quality', 'OK');
+    expect(attributes).to.have.property('startDate', '2024-12-18');
+    expect(attributes).to.have.property('active', true);
+  });
+  
+  test("should have relationships with valid meteringPoint", function() {
+    const relationships = res.getBody().data[0].relationships;
+    expect(relationships).to.have.property('meteringPoint');
+    expect(relationships.meteringPoint).to.have.property('type', 'metering-points');
+    expect(relationships.meteringPoint).to.have.property('id', '902266200000000074');
+  });
+  
+  test("should contain links with valid 'self' property", function() {
+    const links = res.getBody().data[0].links;
+    expect(links).to.have.property('self').that.is.a('string');
+    expect(links.self).to.include('/metering-values/v1/metering-points/');
+  });
+  
+  test("should return the correct links at the top level", function() {
+    const links = res.getBody().links;
+    expect(links).to.have.property('self').that.is.a('string');
+    expect(links.self).to.include('/metering-values/v1/metering-points/');
+  });
+  
+  test("should contain multiple estimated-annual-volumes data items", function() {
+    const data = res.getBody();
+    expect(data.data).to.have.length.above(1);
+  });
+  
+  test("should validate the second item in the data array", function() {
+    const attributes = res.getBody().data[1].attributes;
+    expect(attributes).to.have.property('startDate', '2024-12-16');
+    expect(attributes).to.have.property('endDate', '2024-12-18');
+    expect(attributes).to.have.property('volume').that.is.a('number');
+    expect(attributes.volume).to.be.above(0);
+    expect(attributes).to.have.property('calculationMethod', 'MANUAL');
+  });
+  
+  test("should validate the last item in the data array", function() {
+    const attributes = res.getBody().data[7].attributes;
+    expect(attributes).to.have.property('startDate', '2024-01-01');
+    expect(attributes).to.have.property('endDate', '2024-12-04');
+    expect(attributes).to.have.property('volume').that.is.a('number');
+    expect(attributes.volume).to.be.above(0);
+    expect(attributes).to.have.property('calculationMethod', 'MANUAL');
+  });
+}
